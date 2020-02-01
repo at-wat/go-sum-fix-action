@@ -1,0 +1,24 @@
+name: "Go sum fix"
+description: "Update go.sum."
+inputs:
+  github_token:
+    description: "GITHUB_TOKEN."
+    required: true
+  git_user:
+    description: "User name of commit author."
+    required: true
+  git_email:
+    description: "E-mail address of commit author."
+    required: true
+  commit_style:
+    description: "Commit style. (add|squash)"
+  commit_message:
+    description: "Commit message."
+  push:
+    description: "Push to the branch? (no|yes|force)"
+runs:
+  using: "docker"
+  image: "Dockerfile"
+branding:
+  icon: "refresh-ccw"
+  color: "white"
