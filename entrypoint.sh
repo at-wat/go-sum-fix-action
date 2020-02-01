@@ -16,8 +16,12 @@ echo -e "machine github.com\nlogin ${INPUT_GITHUB_TOKEN}" > ~/.netrc
 git config user.name ${INPUT_GIT_USER}
 git config user.email ${INPUT_GIT_EMAIL}
 
-go mod download
-go mod tidy
+find . -name go.mod | while read dir
+do
+  cd ${dir}
+  go mod download
+  go mod tidy
+done
 
 if git diff --cached --exit-code
 then
