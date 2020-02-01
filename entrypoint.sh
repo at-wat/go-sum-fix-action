@@ -19,7 +19,7 @@ do
   go mod tidy
 done
 
-if git diff --cached --exit-code
+if git diff --exit-code
 then
   echo "Up-to-date"
   exit 0
