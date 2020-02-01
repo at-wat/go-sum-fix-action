@@ -5,12 +5,8 @@ cd "${GITHUB_WORKSPACE}" \
 
 set -eu
 
-if [[ "${INPUT_BRANCH}" == refs/heads/* ]]
-then
-  BRANCH=$(echo ${INPUT_BRANCH} | sed -e "s|^refs/heads/||")
-else
-  BRANCH=${INPUT_BRANCH}
-fi
+BRANCH=$(git symbolic-ref -q --short HEAD) \
+  || (echo "You are in 'detached HEAD' state." >&2; exit 1)
 
 echo -e "machine github.com\nlogin ${INPUT_GITHUB_TOKEN}" > ~/.netrc
 git config user.name ${INPUT_GIT_USER}

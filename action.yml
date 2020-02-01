@@ -4,9 +4,6 @@ inputs:
   github_token:
     description: "GITHUB_TOKEN."
     required: true
-  branch:
-    description: "Target branch."
-    required: true
   git_user:
     description: "User name of commit author."
     required: true
