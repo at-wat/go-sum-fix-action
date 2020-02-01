@@ -1,11 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 cd "${GITHUB_WORKSPACE}" \
   || (echo "Workspace is unavailable" >&2; exit 1)
 
 set -eu
 
-BRANCH=${GITHUB_REF}
+if [[ "${INPUT_BRANCH}" == refs/heads/* ]]
+then
+  BRANCH=$(echo ${INPUT_BRANCH} | sed -e "s|^refs/heads/||")
+else
+  BRANCH=${INPUT_BRANCH}
+fi
 
 echo -e "machine github.com\nlogin ${INPUT_GITHUB_TOKEN}" > ~/.netrc
 git config user.name ${INPUT_GIT_USER}
