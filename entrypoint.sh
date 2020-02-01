@@ -14,8 +14,7 @@ git config user.email ${INPUT_GIT_EMAIL}
 go mod download
 go mod tidy
 
-select ${INPUT_COMMIT_STYLE:-add} in
-case
+case ${INPUT_COMMIT_STYLE:-add} in
   add)
     git add .;
     git commit -m ${INPUT_COMMIT_MESSAGE:-"Fix go.sum"};
@@ -30,8 +29,7 @@ case
     ;;
 esac
 
-select ${INPUT_PUSH:-no} in
-case
+case ${INPUT_PUSH:-no} in
   no)
     ;;
   yes)
