@@ -14,7 +14,7 @@ git config user.email ${INPUT_GIT_EMAIL}
 
 find . -name go.mod | while read dir
 do
-  cd ${dir}
+  cd $(dirname ${dir})
   go mod download
   go mod tidy
 done
