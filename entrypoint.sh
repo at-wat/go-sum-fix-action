@@ -19,6 +19,12 @@ git config user.email ${INPUT_GIT_EMAIL}
 go mod download
 go mod tidy
 
+if git diff --cached --exit-code
+then
+  echo "Up-to-date"
+  exit 0
+fi
+
 case ${INPUT_COMMIT_STYLE:-add} in
   add)
     git add .;
