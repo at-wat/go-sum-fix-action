@@ -17,6 +17,7 @@ do
   cd $(dirname ${dir})
   go mod download
   go mod tidy
+  cd "${GITHUB_WORKSPACE}"
 done
 
 if git diff --exit-code
