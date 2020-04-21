@@ -16,6 +16,8 @@ inputs:
     description: "Commit message."
   push:
     description: "Push to the branch? (no|yes|force)"
+  goprivate:
+    description: "Set GOPRIVATE."
 runs:
   using: "docker"
   image: "Dockerfile"

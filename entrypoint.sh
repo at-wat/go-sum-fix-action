@@ -5,6 +5,8 @@ cd "${GITHUB_WORKSPACE}" \
 
 set -eu
 
+export GOPRIVATE=${INPUT_GOPRIVATE:-}
+
 BRANCH=$(git symbolic-ref -q --short HEAD) \
   || (echo "You are in 'detached HEAD' state." >&2; exit 1)
 
