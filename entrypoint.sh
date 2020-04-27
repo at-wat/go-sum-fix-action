@@ -16,7 +16,7 @@ git config user.email ${INPUT_GIT_EMAIL}
 
 INPUT_GO_MOD_PATHS=${INPUT_GO_MOD_PATHS:-$(find . -name go.mod | xargs -r -n1 dirname)}
 
-echo ${INPUT_GO_MOD_PATHS} | while read dir
+echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
 do
   cd ${dir}
   go mod download
