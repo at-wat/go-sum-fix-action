@@ -14,8 +14,7 @@ BRANCH=$(git symbolic-ref -q --short HEAD) \
 git config --unset url."https://github".insteadOf || true
 git config --global --unset url."https://github".insteadOf || true
 
-git remote set-url origin \
-  "https://${GITHUB_ACTOR}:${INPUT_GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}"
+echo -e "machine github.com\nlogin ${INPUT_GITHUB_TOKEN}" > ~/.netrc
 git config user.name ${INPUT_GIT_USER}
 git config user.email ${INPUT_GIT_EMAIL}
 
@@ -50,14 +49,15 @@ case ${INPUT_COMMIT_STYLE:-add} in
     ;;
 esac
 
+origin=https://github.com/${GITHUB_REPOSITORY}
 case ${INPUT_PUSH:-no} in
   no)
     ;;
   yes)
-    git push origin ${BRANCH};
+    git push ${origin} ${BRANCH};
     ;;
   force)
-    git push -f origin ${BRANCH};
+    git push -f ${origin} ${BRANCH};
     ;;
   *)
     echo "Unknown push value: ${INPUT_PUSH}" >&2;
