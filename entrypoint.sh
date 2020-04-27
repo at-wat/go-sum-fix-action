@@ -18,7 +18,7 @@ INPUT_GO_MOD_PATHS=${INPUT_GO_MOD_PATHS:-$(find . -name go.mod | xargs -r -n1 di
 
 echo ${INPUT_GO_MOD_PATHS} | while read dir
 do
-  cd $(dirname ${dir})
+  cd ${dir}
   go mod download
   go mod tidy
   cd "${GITHUB_WORKSPACE}"
