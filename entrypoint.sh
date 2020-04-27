@@ -10,7 +10,8 @@ export GOPRIVATE=${INPUT_GOPRIVATE:-}
 BRANCH=$(git symbolic-ref -q --short HEAD) \
   || (echo "You are in 'detached HEAD' state." >&2; exit 1)
 
-echo -e "machine github.com\nlogin ${INPUT_GITHUB_TOKEN}" > ~/.netrc
+git remote set-url origin \
+  "https://${GITHUB_ACTOR}:${INPUT_GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}"
 git config user.name ${INPUT_GIT_USER}
 git config user.email ${INPUT_GIT_EMAIL}
 
