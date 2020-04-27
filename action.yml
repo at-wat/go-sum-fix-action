@@ -18,6 +18,8 @@ inputs:
     description: "Push to the branch? (no|yes|force)"
   goprivate:
     description: "Set GOPRIVATE."
+  go_mod_paths:
+    description: "Space separated list of the paths to the directories of go.mod. Automatically detected by default."
 runs:
   using: "docker"
   image: "Dockerfile"
