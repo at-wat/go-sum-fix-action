@@ -11,8 +11,8 @@ BRANCH=$(git symbolic-ref -q --short HEAD) \
   || (echo "You are in 'detached HEAD' state." >&2; exit 1)
 
 # Workaround to use correct token
-git config --unset url."https://github".insteadOf
-git config --global --unset url."https://github".insteadOf
+git config --unset url."https://github".insteadOf || true
+git config --global --unset url."https://github".insteadOf || true
 
 git remote set-url origin \
   "https://${GITHUB_ACTOR}:${INPUT_GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}"
