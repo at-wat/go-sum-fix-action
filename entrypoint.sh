@@ -11,8 +11,7 @@ BRANCH=$(git symbolic-ref -q --short HEAD) \
   || (echo "You are in 'detached HEAD' state." >&2; exit 1)
 
 # Workaround to use correct token
-git config --unset url."https://github".insteadOf || true
-git config --global --unset url."https://github".insteadOf || true
+git config --unset http."https://github.com/".extraheader || true
 
 echo -e "machine github.com\nlogin ${INPUT_GITHUB_TOKEN}" > ~/.netrc
 git config user.name ${INPUT_GIT_USER}
