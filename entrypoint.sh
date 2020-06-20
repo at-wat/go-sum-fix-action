@@ -5,10 +5,16 @@ cd "${GITHUB_WORKSPACE}" \
 
 set -eu
 
+if git log --oneline -n1 --format="%s" | grep -s -e " to v[0-9]\+$"
+then
+  echo "Skipping major version update. Import path must be manually updated" >&2
+  exit 0
+fi
+
 export GOPRIVATE=${INPUT_GOPRIVATE:-}
 
 BRANCH=$(git symbolic-ref -q --short HEAD) \
-  || (echo "You are in 'detached HEAD' state." >&2; exit 1)
+  || (echo "You are in 'detached HEAD' state" >&2; exit 1)
 
 # Workaround to use correct token
 git config --unset http."https://github.com/".extraheader || true
