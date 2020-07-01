@@ -12,6 +12,10 @@ jobs:
       - name: prepare test data
         run: |
           sed 's/v0\.0\.1/v0.0.2/' -i test/tidied/go.mod
+          git add test/tidied/go.mod
+          git config user.name "Dummy"
+          git config user.email "dummy@dummy.dummy"
+          git commit -m "Test"
       - name: run
         uses: ./
         with:
@@ -19,7 +23,7 @@ jobs:
           git_email: dummy@dummy.dummy
           github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
-          go_mod_path: test/tidied
+          go_mod_paths: test/tidied
       - name: validate
         run: |
           grep "v0.0.2 h1" test/tidied/go.sum
@@ -32,6 +36,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: run (should always fail)
+        id: failure
         uses: ./
         continue-on-error: true
         with:
@@ -39,7 +44,6 @@ jobs:
           git_email: dummy@dummy.dummy
           github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
-          go_mod_path: test/not-tidied
+          go_mod_paths: test/not-tidied
       - name: unexpectedly success
-        if: ${{ success() }}
-        run: false
+        run: test "${{ steps.failure.outcome }}" == "failure"
