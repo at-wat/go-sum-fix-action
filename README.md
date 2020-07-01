@@ -1,6 +1,9 @@
 # go-sum-fix-action
 GitHub Action to update go.sum.
 
+## Updates
+
+Since v0.3.0, **go-sum-fix-action fails if previous commit is not tidied**. This is to prevent causing infinite loop of force-push by Renovate bot and go-sum-fix-action.
 
 ## Example
 
