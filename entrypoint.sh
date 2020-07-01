@@ -25,6 +25,36 @@ git config user.email ${INPUT_GIT_EMAIL}
 
 INPUT_GO_MOD_PATHS=${INPUT_GO_MOD_PATHS:-$(find . -name go.mod | xargs -r -n1 dirname)}
 
+case ${INPUT_CHECK_PREVIOUSLY_TIDIED:-true} in
+  true)
+    previous_commit_not_tidied=false
+    git fetch --depth=2 origin ${BRANCH}
+    if git checkout HEAD^
+    then
+      echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
+      do
+        cd ${dir}
+        go mod download
+        go mod tidy
+        cd "${GITHUB_WORKSPACE}"
+      done
+      if ! git diff --exit-code
+      then
+        previous_commit_not_tidied=true
+      fi
+      git stash
+      git checkout ${BRANCH}
+    else
+      echo "Previous commit not found; skipping check" >&2
+    fi
+    if ${previous_commit_not_tidied}
+    then
+      echo "Previous commit is not tidied." >&2
+      exit 1
+    fi
+    ;;
+esac
+
 echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
 do
   cd ${dir}

@@ -1,0 +1,51 @@
+name: ci
+on:
+  push:
+    branches:
+      - '**'
+      - '!master'
+
+jobs:
+  base_tidied:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: prepare test data
+        run: |
+          sed 's/v0\.0\.1/v0.0.2/' -i test/tidied/go.mod
+          git add test/tidied/go.mod
+          git config user.name "Dummy"
+          git config user.email "dummy@dummy.dummy"
+          git commit -m "Test"
+      - name: run
+        uses: ./
+        with:
+          git_user: Dummy
+          git_email: dummy@dummy.dummy
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          push: no
+          go_mod_paths: test/tidied
+      - name: validate
+        run: |
+          grep "v0.0.2 h1" test/tidied/go.sum
+          grep "v0.0.2/go.mod" test/tidied/go.sum
+          ! grep "v0.0.1 h1" test/tidied/go.sum
+          ! grep "v0.0.1/go.mod" test/tidied/go.sum
+  base_not_tidied:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: run
+        id: failure
+        uses: ./
+        continue-on-error: true
+        with:
+          git_user: Dummy
+          git_email: dummy@dummy.dummy
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          push: no
+          go_mod_paths: test/not-tidied
+      - name: validate
+        run: test "${{ steps.failure.outcome }}" == "failure"
