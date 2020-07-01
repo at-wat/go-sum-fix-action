@@ -33,18 +33,13 @@ jobs:
         uses: actions/checkout@v2
       - name: run (should always fail)
         uses: ./
+        continue-on-error: true
         with:
           git_user: Dummy
           git_email: dummy@dummy.dummy
           github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
           go_mod_path: test/not-tidied
-      - name: validate
-        if: ${{ always() }}
-        run: |
-          if [ "${{ failure() }}" = "true" ]
-          then
-            true
-          else
-            false
-          fi
+      - name: unexpectedly success
+        if: ${{ success() }}
+        run: false
