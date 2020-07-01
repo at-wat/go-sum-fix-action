@@ -29,11 +29,12 @@ case ${INPUT_CHECK_BASE_TIDIED:-true} in
   true)
     base_branch_not_tidied=false
     base_sha=$(cat ${GITHUB_EVENT_PATH} | jq -r '.before')
-    if [ ${base_sha} = "null" ]
+    if [ "${base_sha}" = "null" ]
     then
       echo "Base commit not found; skipping base branch check" >&2
     else
-      git fetch --depth=100
+      git fetch --depth=100 origin ${BRANCH}
+      git log --oneline
       if git checkout ${base_sha}
       then
         echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
