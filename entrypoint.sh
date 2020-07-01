@@ -28,10 +28,10 @@ INPUT_GO_MOD_PATHS=${INPUT_GO_MOD_PATHS:-$(find . -name go.mod | xargs -r -n1 di
 case ${INPUT_CHECK_BASE_TIDIED:-true} in
   true)
     base_branch_not_tidied=false
-    base_sha=$(cat ${GITHUB_EVENT_PATH} | jq -r '.[0].base.sha')
+    base_sha=$(cat ${GITHUB_EVENT_PATH} | jq -r '.before')
     if [ ${base_sha} = "null" ]
     then
-      echo "This is not PR build; skipping base branch check" >&2
+      echo "Base commit not found; skipping base branch check" >&2
     else
       git fetch --unshallow --depth=100
       if git checkout ${base_sha}
