@@ -33,7 +33,7 @@ case ${INPUT_CHECK_BASE_TIDIED:-true} in
     then
       echo "Base commit not found; skipping base branch check" >&2
     else
-      git fetch --unshallow --depth=100
+      git fetch --depth=100
       if git checkout ${base_sha}
       then
         echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
