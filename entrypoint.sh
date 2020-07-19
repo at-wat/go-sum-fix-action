@@ -49,7 +49,8 @@ case ${INPUT_CHECK_PREVIOUSLY_TIDIED:-true} in
     fi
     if ${previous_commit_not_tidied}
     then
-      echo "Previous commit is not tidied." >&2
+      echo "Previous commit is not tidied" >&2
+      echo "Skipping commit to avoid infinite push loop" >&2
       exit 1
     fi
     ;;
@@ -68,6 +69,15 @@ then
   echo "Up-to-date"
   exit 0
 fi
+
+# Check no `// indirect` is updated
+if git diff HEAD^ | grep -e '^[+-].* // indirect$'
+then
+  echo "Indirect dependencies are updated" >&2
+  echo "Skipping commit to avoid infinite push loop" >&2
+  exit 0
+fi
+
 
 case ${INPUT_COMMIT_STYLE:-add} in
   add)
