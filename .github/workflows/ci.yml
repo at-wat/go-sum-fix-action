@@ -40,7 +40,7 @@ jobs:
       - name: prepare test data
         run: |
           sed 's/v0\.0\.1/v0.0.2/' -i test/tidied/go.mod
-          sed '/^require (/a \        github.com/at-wat/sandbox // indirect' \
+          sed '/^require (/a \\tgithub.com/at-wat/sandbox v0.0.0-20200609080939-f9cdf82dbb3d // indirect' \
             -i test/tidied/go.mod
           git add test/tidied/go.mod
           git config user.name "Dummy"
