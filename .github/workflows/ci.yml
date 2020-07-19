@@ -57,7 +57,7 @@ jobs:
           go_mod_paths: test/tidied
       - name: validate
         run: |
-          grep "github.com/at-wat/sandbox // indirect" test/tidied/go.mod
+          grep "github.com/at-wat/sandbox v0.0.0-20200609080939-f9cdf82dbb3d" test/tidied/go.mod
   base_not_tidied:
     runs-on: ubuntu-latest
     steps:
