@@ -71,7 +71,7 @@ then
 fi
 
 # Check no `// indirect` is updated
-if git diff HEAD^ | grep -e '^[+\-].* // indirect$'
+if git diff | grep -e '^[+\-].* // indirect$'
 then
   echo "Indirect dependencies are updated" >&2
   echo "Skipping commit to avoid infinite push loop" >&2
