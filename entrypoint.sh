@@ -5,6 +5,12 @@ cd "${GITHUB_WORKSPACE}" \
 
 set -eu
 
+if [ ! "$(git show HEAD --pretty=format:%ae -s)" = "bot@renovateapp.com" ]
+then
+  echo "HEAD commit author is not Renovate Bot" >&2
+  exit 0
+fi
+
 if git log --oneline -n1 --format="%s" | grep -s -e " to v[0-9]\+$"
 then
   echo "Skipping major version update. Import path must be manually updated" >&2
