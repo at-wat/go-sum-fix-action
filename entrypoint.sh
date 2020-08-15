@@ -5,7 +5,7 @@ cd "${GITHUB_WORKSPACE}" \
 
 set -eu
 
-if [ "$(git show HEAD --pretty=format:%ae -s)" = "bot@renovateapp.com" ]
+if [ ! "$(git show HEAD --pretty=format:%ae -s)" = "bot@renovateapp.com" ]
 then
   echo "HEAD commit author is not Renovate Bot" >&2
   exit 0
