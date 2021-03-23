@@ -25,6 +25,7 @@ BRANCH=$(git symbolic-ref -q --short HEAD) \
 # Workaround to use correct token
 git config --unset http."https://github.com/".extraheader || true
 
+echo "Setting up authentication"
 echo -e "machine github.com\nlogin ${INPUT_GITHUB_TOKEN}" > ~/.netrc
 git config user.name ${INPUT_GIT_USER}
 git config user.email ${INPUT_GIT_EMAIL}
@@ -33,6 +34,7 @@ INPUT_GO_MOD_PATHS=${INPUT_GO_MOD_PATHS:-$(find . -name go.mod | xargs -r -n1 di
 
 case ${INPUT_CHECK_PREVIOUSLY_TIDIED:-true} in
   true)
+    echo "Checking that previous commit is tidied"
     previous_commit_not_tidied=false
     git fetch --depth=2 origin ${BRANCH}
     if git checkout HEAD^
@@ -62,6 +64,7 @@ case ${INPUT_CHECK_PREVIOUSLY_TIDIED:-true} in
     ;;
 esac
 
+echo "Tidying"
 echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
 do
   cd ${dir}
@@ -101,6 +104,7 @@ case ${INPUT_COMMIT_STYLE:-add} in
     ;;
 esac
 
+echo "Pushing to the repository"
 origin=https://github.com/${GITHUB_REPOSITORY}
 case ${INPUT_PUSH:-no} in
   no)
