@@ -24,7 +24,7 @@ BRANCH=$(git symbolic-ref -q --short HEAD) \
 
 echo "Setting up authentication"
 git config --unset http."https://github.com/".extraheader || true
-git config --add http."https://github.com/".extraheader "authorization: Basic $(echo -n ":${INPUT_GITHUB_TOKEN}" | openssl base64 | tr -d '\n')"
+git config --add http."https://github.com/".extraheader "authorization: Basic $(echo -n ":${INPUT_GITHUB_TOKEN}" | base64 | tr -d '\n')"
 git config user.name ${INPUT_GIT_USER}
 git config user.email ${INPUT_GIT_EMAIL}
 
