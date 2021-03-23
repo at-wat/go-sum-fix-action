@@ -11,8 +11,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
       - name: prepare test data
         run: |
           sed 's/v0\.0\.1/v0.0.2/' -i test/tidied/go.mod
@@ -24,10 +22,9 @@ jobs:
         uses: ./
         with:
           git_user: Dummy
-          git_email: 8390204+at-wat@users.noreply.github.com
+          git_email: dummy@dummy.dummy
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          commit_style: add
-          push: yes
+          push: no
           go_mod_paths: test/tidied
       - name: validate
         run: |
@@ -54,7 +51,7 @@ jobs:
         with:
           check_previously_tidied: false
           git_user: Dummy
-          git_email: 8390204+at-wat@users.noreply.github.com
+          git_email: dummy@dummy.dummy
           github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
           go_mod_paths: test/tidied
@@ -77,7 +74,7 @@ jobs:
         continue-on-error: true
         with:
           git_user: Dummy
-          git_email: 8390204+at-wat@users.noreply.github.com
+          git_email: dummy@dummy.dummy
           github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
           go_mod_paths: test/not-tidied
@@ -93,13 +90,13 @@ jobs:
           sed 's/v0\.0\.1/v0.0.2/' -i test/tidied/go.mod
           git add test/tidied/go.mod
           git config user.name "Dummy"
-          git config user.email "8390204+at-wat@users.noreply.github.com"
+          git config user.email "dummy@dummy.dummy"
           git commit -m "Test"
       - name: run
         uses: ./
         with:
           git_user: Dummy
-          git_email: 8390204+at-wat@users.noreply.github.com
+          git_email: dummy@dummy.dummy
           github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
           go_mod_paths: test/tidied
