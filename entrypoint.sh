@@ -110,10 +110,10 @@ case ${INPUT_PUSH:-no} in
   no)
     ;;
   yes)
-    GIT_TRACE=1 GIT_CURL_VERBOSE=1 git push ${origin} ${BRANCH};
+    git push ${origin} ${BRANCH};
     ;;
   force)
-    GIT_TRACE=1 GIT_CURL_VERBOSE=1 git push -f ${origin} ${BRANCH};
+    git push -f ${origin} ${BRANCH};
     ;;
   *)
     echo "Unknown push value: ${INPUT_PUSH}" >&2;
