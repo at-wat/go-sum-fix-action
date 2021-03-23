@@ -3,7 +3,7 @@
 cd "${GITHUB_WORKSPACE}" \
   || (echo "Workspace is unavailable" >&2; exit 1)
 
-if [ -z ${INPUT_GITHUB_TOKEN} ]
+if [ -z "${INPUT_GITHUB_TOKEN}" ]
 then
   echo "github_token is not provided" >&2
   exit 1
