@@ -26,7 +26,7 @@ BRANCH=$(git symbolic-ref -q --short HEAD) \
 git config --unset http."https://github.com/".extraheader || true
 
 echo "Setting up authentication"
-echo -e "machine github.com\nlogin ${INPUT_GITHUB_TOKEN}" > ~/.netrc
+echo -e "machine github.com\nlogin token\npassword ${INPUT_GITHUB_TOKEN}" > ~/.netrc
 git config user.name ${INPUT_GIT_USER}
 git config user.email ${INPUT_GIT_EMAIL}
 
