@@ -30,7 +30,7 @@ revert_git_config() {
 trap revert_git_config EXIT
 
 git config --unset http."https://github.com/".extraheader || true
-git config --add http."https://github.com/".extraheader "Authorization: Basic $(echo -n ":${INPUT_GITHUB_TOKEN}" | base64 | tr -d '\n')"
+git config --add http."https://github.com/".extraheader "Authorization: Basic $(echo -n "x-access-token:${INPUT_GITHUB_TOKEN}" | base64 | tr -d '\n')"
 git config user.name ${INPUT_GIT_USER}
 git config user.email ${INPUT_GIT_EMAIL}
 
