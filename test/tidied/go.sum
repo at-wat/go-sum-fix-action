@@ -1,5 +1,5 @@
-github.com/at-wat/ebml-go v0.0.1 h1:4KpfGw+PZr5q77GwEwYoNDPK+N4M//+ZetTf22qGtIw=
-github.com/at-wat/ebml-go v0.0.1/go.mod h1:w1cJs7zmGsb5nnSvhWGKLCxvfu4FVx5ERvYDIalj1ww=
+github.com/at-wat/ebml-go v0.0.2 h1:nk1P4sxZtHsO/QdzeISXIjF1On8+ZIseWRG6kCcd2ow=
+github.com/at-wat/ebml-go v0.0.2/go.mod h1:w1cJs7zmGsb5nnSvhWGKLCxvfu4FVx5ERvYDIalj1ww=
 github.com/at-wat/mqtt-go v0.11.0 h1:G/KYqTYFpvQkOEWBHiXPEzm8tBPt5L02dH5zbJ4eAb4=
 github.com/at-wat/mqtt-go v0.11.0/go.mod h1:FQeh8eNmQ7bAq++hfe/5AgV+R9D+6EWcaY72t/rTd+Q=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
