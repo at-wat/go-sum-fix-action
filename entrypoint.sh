@@ -26,7 +26,7 @@ BRANCH=$(git symbolic-ref -q --short HEAD) \
 git config --unset http."https://github.com/".extraheader || true
 
 echo "Setting up authentication"
-echo -e "machine github.com\nlogin ${INPUT_GITHUB_TOKEN}" > ~/.netrc
+echo -e "machine github.com\nlogin token\npassword ${INPUT_GITHUB_TOKEN}" > ~/.netrc
 git config user.name ${INPUT_GIT_USER}
 git config user.email ${INPUT_GIT_EMAIL}
 
@@ -110,10 +110,10 @@ case ${INPUT_PUSH:-no} in
   no)
     ;;
   yes)
-    GIT_TRACE=1 GIT_CURL_VERBOSE=1 GIT_SSH_COMMAND="echo ssh used" git push ${origin} ${BRANCH};
+    GIT_TRACE=1 GIT_CURL_VERBOSE=1 git push ${origin} ${BRANCH};
     ;;
   force)
-    GIT_TRACE=1 GIT_CURL_VERBOSE=1 GIT_SSH_COMMAND="echo ssh used" git push -f ${origin} ${BRANCH};
+    GIT_TRACE=1 GIT_CURL_VERBOSE=1 git push -f ${origin} ${BRANCH};
     ;;
   *)
     echo "Unknown push value: ${INPUT_PUSH}" >&2;
