@@ -22,11 +22,15 @@ export GOPRIVATE=${INPUT_GOPRIVATE:-}
 BRANCH=$(git symbolic-ref -q --short HEAD) \
   || (echo "You are in 'detached HEAD' state" >&2; exit 1)
 
-# Workaround to use correct token
-git config --unset http."https://github.com/".extraheader || true
-
 echo "Setting up authentication"
-echo -e "machine github.com\nlogin token\npassword ${INPUT_GITHUB_TOKEN}" > ~/.netrc
+cp .git/config .git/config.bak
+revert_git_config() {
+  mv .git/config.bak .git/config
+}
+trap revert_git_config EXIT
+
+git config --unset http."https://github.com/".extraheader || true
+git config --add http."https://github.com/".extraheader "Authorization: Basic $(echo -n ":${INPUT_GITHUB_TOKEN}" | base64 | tr -d '\n')"
 git config user.name ${INPUT_GIT_USER}
 git config user.email ${INPUT_GIT_EMAIL}
 
