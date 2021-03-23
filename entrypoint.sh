@@ -24,9 +24,11 @@ BRANCH=$(git symbolic-ref -q --short HEAD) \
 
 echo "Setting up authentication"
 git config --unset http."https://github.com/".extraheader || true
-git config --add http."https://github.com/".extraheader "Authorization: Bearer ${INPUT_GITHUB_TOKEN}"
+git config --add http."https://github.com/".extraheader "AUTHORIZATION: basic ${INPUT_GITHUB_TOKEN}"
 git config user.name ${INPUT_GIT_USER}
 git config user.email ${INPUT_GIT_EMAIL}
+
+cat .git/config
 
 INPUT_GO_MOD_PATHS=${INPUT_GO_MOD_PATHS:-$(find . -name go.mod | xargs -r -n1 dirname)}
 
