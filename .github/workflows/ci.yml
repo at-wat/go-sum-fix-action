@@ -24,7 +24,8 @@ jobs:
           git_user: Dummy
           git_email: dummy@dummy.dummy
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          push: no
+          commit_style: add
+          push: yes
           go_mod_paths: test/tidied
       - name: validate
         run: |
