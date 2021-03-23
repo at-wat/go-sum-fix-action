@@ -110,10 +110,10 @@ case ${INPUT_PUSH:-no} in
   no)
     ;;
   yes)
-    git push ${origin} ${BRANCH};
+    GIT_TRACE=1 GIT_SSH_COMMAND="echo ssh used" git push ${origin} ${BRANCH};
     ;;
   force)
-    git push -f ${origin} ${BRANCH};
+    GIT_TRACE=1 GIT_SSH_COMMAND="echo ssh used" git push -f ${origin} ${BRANCH};
     ;;
   *)
     echo "Unknown push value: ${INPUT_PUSH}" >&2;
