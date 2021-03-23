@@ -24,8 +24,7 @@ jobs:
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
-          commit_style: add
-          push: yes
+          push: no
           go_mod_paths: test/tidied
       - name: validate
         run: |
