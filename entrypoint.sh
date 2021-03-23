@@ -29,6 +29,13 @@ revert_git_config() {
 }
 trap revert_git_config EXIT
 
+echo "git config -l --global"
+git config -l --global || true
+echo "git config -l --system"
+git config -l --system || true
+echo "git config -l"
+git config -l || true
+
 git config --unset http."https://github.com/".extraheader || true
 git config --add http."https://github.com/".extraheader "authorization: Basic $(echo -n ":${INPUT_GITHUB_TOKEN}" | base64 | tr -d '\n')"
 git config user.name ${INPUT_GIT_USER}
