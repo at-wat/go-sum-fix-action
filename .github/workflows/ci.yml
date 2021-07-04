@@ -28,6 +28,7 @@ jobs:
           go_mod_paths: test/tidied
       - name: validate
         run: |
+          set -x
           grep "v0.0.2 h1" test/tidied/go.sum
           grep "v0.0.2/go.mod" test/tidied/go.sum
           ! grep "v0.0.1 h1" test/tidied/go.sum
@@ -102,6 +103,7 @@ jobs:
           go_mod_paths: test/tidied
       - name: validate
         run: |
+          set -x
           # sum must not be updated
           grep "v0.0.1 h1" test/tidied/go.sum
           grep "v0.0.1/go.mod" test/tidied/go.sum
@@ -130,6 +132,7 @@ jobs:
           update_import_path: true
       - name: validate
         run: |
+          set -x
           grep "go-github/v36 v36\.0\.0 h1" test/tidied/go.sum
           grep "go-github/v36 v36\.0\.0/go.mod" test/tidied/go.sum
           grep "go-github/v36" test/tidied/dummy.go
