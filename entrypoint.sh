@@ -17,13 +17,15 @@ then
   exit 0
 fi
 
+commit_message="$(git log --oneline -n1 --format="%s")"
+
 update_import_path=false
-if git log --oneline -n1 --format="%s" | grep -s -e " to v[0-9]\+$"
+if echo "${commit_message}" | grep -s -e " to v[0-9]\+\$"
 then
   case ${INPUT_UPDATE_IMPORT_PATH:-true} in
     true)
       update_import_path=true
-      from_to=$(git log --oneline -n1 --format="%s" | sed -n 's|^Update module \(\S\+\)/\(v[0-9]\+\) to \(v[0-9]\+\)$|\1/\2 \1/\3|p')
+      from_to=$(echo "${commit_message}" | sed -n 's|^Update module \(\S\+\)/\(v[0-9]\+\) to \(v[0-9]\+\)$|\1/\2 \1/\3|p')
       import_path_from=$(echo ${from_to} | cut -f1 -d" ")
       import_path_to=$(echo ${from_to} | cut -f2 -d" ")
       if [ -z "${import_path_from}" ] || [ -z "${import_path_to}" ]
@@ -38,6 +40,18 @@ then
       ;;
   esac
 fi
+
+monorepo=
+monorepo_version=
+for pkg in ${INPUT_MONOREPOS}
+do
+  if echo "${commit_message}" | grep -s -e "^Update module ${pkg} to "
+  then
+    monorepo=$(echo ${pkg} | sed 's|/v[0-9]\+$||')
+    monorepo_version=$(echo "${commit_message}" | sed -n "s|^Update module ${pkg} to \(v[0-9]\+\)\$|\1|p")
+    break
+  fi
+done
 
 export GOPRIVATE=${INPUT_GOPRIVATE:-}
 
@@ -95,6 +109,28 @@ then
   echo "Updating import path from ${import_path_from} to ${import_path_to}"
   sed "s|\"$(echo ${import_path_from} | sed 's/\./\\./g')|\"${import_path_to}|" \
     -i $(find . -name "*.go")
+fi
+
+if [ -n "${monorepo}" ] && [ -n "${monorepo_version}" ]
+then
+  tmpdir=$(mkdir -d)
+  git clone -b ${monorepo_version} --depth=1 https://${monorepo} ${tmpdir}
+  tags=$(git -C ${tmpdir} tag --list --points-at HEAD)
+  for tag in ${tags}
+  do
+    subpkg=$(dirname ${tag})
+    subpkg_version=$(basename ${tag})
+
+    echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
+    do
+      if grep -s -F "${monorepo}/${subpkg}" ${dir}
+      then
+        cd ${dir}
+        go get ${monorepo}/${subpkg}@${subpkg_version}
+        cd "${GITHUB_WORKSPACE}"
+      fi
+    done
+  done
 fi
 
 echo "Tidying"
