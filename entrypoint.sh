@@ -115,6 +115,7 @@ if [ -n "${monorepo}" ] && [ -n "${monorepo_version}" ]
 then
   tmpdir=$(mkdir -d)
   git clone -b ${monorepo_version} --depth=1 https://${monorepo} ${tmpdir}
+  echo "Updating submodules of ${monorepo} ${monorepo_version}"
   tags=$(git -C ${tmpdir} tag --list --points-at HEAD)
   for tag in ${tags}
   do
@@ -125,6 +126,7 @@ then
     do
       if grep -s -F "${monorepo}/${subpkg}" ${dir}
       then
+        echo "  - ${subpkg} ${subpkg_version}"
         cd ${dir}
         go get ${monorepo}/${subpkg}@${subpkg_version}
         cd "${GITHUB_WORKSPACE}"
