@@ -22,6 +22,8 @@ inputs:
     description: "Space separated list of the paths to the directories of go.mod. Automatically detected by default."
   check_previously_tidied:
     description: "Check that previous commit is go mod tidy-ed. Defaults to true. Note that disabling this check may cause infinite loop of bot push when base branch is not tidied. (true|false)"
+  update_import_path:
+    description: "Automatically update package import path."
 runs:
   using: "docker"
   image: "Dockerfile"

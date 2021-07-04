@@ -32,4 +32,5 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           commit_style: squash
           push: force
+          update_import_path: true # update import path on major update
 ```

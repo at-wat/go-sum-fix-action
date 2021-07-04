@@ -28,6 +28,7 @@ jobs:
           go_mod_paths: test/tidied
       - name: validate
         run: |
+          set -x
           grep "v0.0.2 h1" test/tidied/go.sum
           grep "v0.0.2/go.mod" test/tidied/go.sum
           ! grep "v0.0.1 h1" test/tidied/go.sum
@@ -102,8 +103,39 @@ jobs:
           go_mod_paths: test/tidied
       - name: validate
         run: |
+          set -x
           # sum must not be updated
           grep "v0.0.1 h1" test/tidied/go.sum
           grep "v0.0.1/go.mod" test/tidied/go.sum
           ! grep "v0.0.2 h1" test/tidied/go.sum
           ! grep "v0.0.2/go.mod" test/tidied/go.sum
+  major_import_path:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: prepare test data
+        run: |
+          sed 's|go-github/v35 v35\.3\.0|go-github/v36 v36.0.0|' -i test/tidied/go.mod
+          git add test/tidied/go.mod
+          git config user.name "Dummy"
+          git config user.email "bot@renovateapp.com"
+          git commit -m "Update module github.com/google/go-github/v35 to v36"
+      - name: run
+        uses: ./
+        with:
+          git_user: Dummy
+          git_email: 8390204+at-wat@users.noreply.github.com
+          github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          push: no
+          go_mod_paths: test/tidied
+          update_import_path: true
+      - name: validate
+        run: |
+          set -x
+          grep "go-github/v36 v36\.0\.0 h1" test/tidied/go.sum
+          grep "go-github/v36 v36\.0\.0/go.mod" test/tidied/go.sum
+          grep "go-github/v36" test/tidied/dummy.go
+          ! grep "go-github/v35 v35\.3\.0 h1" test/tidied/go.sum
+          ! grep "go-github/v35 v35\.3\.0/go.mod" test/tidied/go.sum
+          ! grep "go-github/v35" test/tidied/dummy.go
