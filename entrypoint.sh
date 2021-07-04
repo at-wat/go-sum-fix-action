@@ -115,7 +115,7 @@ fi
 
 if [ -n "${monorepo}" ] && [ -n "${monorepo_version}" ]
 then
-  tmpdir=$(mkdir -d)
+  tmpdir=$(mktemp -d)
   git clone -b ${monorepo_version} --depth=1 https://${monorepo} ${tmpdir}
   echo "Updating submodules of ${monorepo} ${monorepo_version}"
   tags=$(git -C ${tmpdir} tag --list --points-at HEAD)
