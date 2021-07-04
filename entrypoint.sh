@@ -17,10 +17,21 @@ then
   exit 0
 fi
 
+update_import_path=false
 if git log --oneline -n1 --format="%s" | grep -s -e " to v[0-9]\+$"
 then
-  echo "Skipping major version update. Import path must be manually updated" >&2
-  exit 0
+  case ${INPUT_UPDATE_IMPORT_PATH:-true} in
+    true)
+      update_import_path=true
+      from_to=$(git log --oneline -n1 --format="%s" | sed -n 's|^Update module \(\S\+\)/\(v[0-9]\+\) to \(v[0-9]\+\)$|\1/\2 \1/\3|')
+      import_path_from=$(echo ${from_to} | cut -f1 -d" ")
+      import_path_to=$(echo ${from_to} | cut -f2 -d" ")
+      ;;
+    *)
+      echo "Skipping major version update. Import path must be manually updated" >&2
+      exit 0
+      ;;
+  esac
 fi
 
 export GOPRIVATE=${INPUT_GOPRIVATE:-}
@@ -73,6 +84,13 @@ case ${INPUT_CHECK_PREVIOUSLY_TIDIED:-true} in
     fi
     ;;
 esac
+
+if ${update_import_path}
+then
+  echo "Updating import path from ${import_path_from} to ${import_path_to}"
+  sed "s|\"${import_path_from}|\"${import_path_to}|" \
+    -i $(find . -name "*.go")
+fi
 
 echo "Tidying"
 echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
