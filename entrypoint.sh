@@ -45,10 +45,11 @@ monorepo=
 monorepo_version=
 for pkg in ${INPUT_MONOREPOS}
 do
-  if echo "${commit_message}" | grep -s -F "^Update module ${pkg} to "
+  pkg_esc=$(echo ${pkg} | sed 's/\./\\./g')
+  if echo "${commit_message}" | grep -s -e "^Update module ${pkg_esc} to "
   then
     monorepo=$(echo ${pkg} | sed 's|/v[0-9]\+$||')
-    monorepo_version=$(echo "${commit_message}" | sed -n "s|^Update module ${pkg} to \(v[0-9]\+\)\$|\1|p")
+    monorepo_version=$(echo "${commit_message}" | sed -n "s|^Update module ${pkg_esc} to \(v[0-9]\+\)\$|\1|p")
     echo "Monorepo ${monorepo} ${monorepo_version}"
     break
   fi
