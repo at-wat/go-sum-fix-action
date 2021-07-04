@@ -88,7 +88,7 @@ esac
 if ${update_import_path}
 then
   echo "Updating import path from ${import_path_from} to ${import_path_to}"
-  sed "s|\"${import_path_from}|\"${import_path_to}|" \
+  sed "s|\"$(${import_path_from} | sed 's/\./\\./g')|\"${import_path_to}|" \
     -i $(find . -name "*.go")
 fi
 
