@@ -139,3 +139,35 @@ jobs:
           ! grep "go-github/v35 v35\.3\.0 h1" test/tidied/go.sum
           ! grep "go-github/v35 v35\.3\.0/go.mod" test/tidied/go.sum
           ! grep "go-github/v35" test/tidied/dummy.go
+  monorepo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: prepare test data
+        run: |
+          sed 's|aws-sdk-go-v2 v1\.5\.0|aws-sdk-go-v2 v1.6.0|' -i test/tidied/go.mod
+          git add test/tidied/go.mod
+          git config user.name "Dummy"
+          git config user.email "bot@renovateapp.com"
+          git commit -m "Update module github.com/aws/aws-sdk-go-v2 to v1.6.0"
+      - name: run
+        uses: ./
+        with:
+          git_user: Dummy
+          git_email: 8390204+at-wat@users.noreply.github.com
+          github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          push: no
+          go_mod_paths: test/tidied
+          update_import_path: true
+      - name: validate
+        run: |
+          set -x
+          grep "aws-sdk-go-v2 v1\.6\.0 h1" test/tidied/go.sum
+          grep "aws-sdk-go-v2 v1\.6\.0/go.mod" test/tidied/go.sum
+          grep "aws-sdk-go-v2/config v1\.3\.0 h1" test/tidied/go.sum
+          grep "aws-sdk-go-v2/config v1\.3\.0/go.mod" test/tidied/go.sum
+          ! grep "aws-sdk-go-v2 v1\.5\.0 h1" test/tidied/go.sum
+          ! grep "aws-sdk-go-v2 v1\.5\.0/go.mod" test/tidied/go.sum
+          ! grep "aws-sdk-go-v2/config v1\.2\.0 h1" test/tidied/go.sum
+          ! grep "aws-sdk-go-v2/config v1\.2\.0/go.mod" test/tidied/go.sum
