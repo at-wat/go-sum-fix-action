@@ -23,7 +23,7 @@ then
   case ${INPUT_UPDATE_IMPORT_PATH:-true} in
     true)
       update_import_path=true
-      from_to=$(git log --oneline -n1 --format="%s" | sed -n 's|^Update module \(\S\+\)/\(v[0-9]\+\) to \(v[0-9]\+\)$|\1/\2 \1/\3|')
+      from_to=$(git log --oneline -n1 --format="%s" | sed -n 's|^Update module \(\S\+\)/\(v[0-9]\+\) to \(v[0-9]\+\)$|\1/\2 \1/\3|p')
       import_path_from=$(echo ${from_to} | cut -f1 -d" ")
       import_path_to=$(echo ${from_to} | cut -f2 -d" ")
       ;;
