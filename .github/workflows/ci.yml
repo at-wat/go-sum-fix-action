@@ -159,7 +159,8 @@ jobs:
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
           push: no
           go_mod_paths: test/tidied
-          update_import_path: true
+          monorepos: |
+            github.com/aws/aws-sdk-go-v2
       - name: validate
         run: |
           set -x
