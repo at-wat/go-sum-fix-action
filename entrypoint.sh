@@ -121,7 +121,6 @@ then
   git clone -b ${monorepo_version} --depth=1 https://${monorepo} ${tmpdir}
   echo "Updating submodules of ${monorepo} ${monorepo_version}"
   tags=$(git -C ${tmpdir} tag --list --points-at HEAD)
-  echo "tags: ${tags}"
 
   for tag in ${tags}
   do
@@ -133,11 +132,9 @@ then
       if grep -s -F "${monorepo}${monorepo_major}/${subpkg}" ${dir}/go.mod
       then
         echo "  - ${subpkg} ${subpkg_version}"
-        cd ${dir}
         from=$(echo "${monorepo}${monorepo_major}/${subpkg} v[0-9\.]\+" | sed 's/\./\\./g')
         to="${monorepo}${monorepo_major}/${subpkg} ${subpkg_version}"
         sed "s|\<${from}\>|${to}|" -i ${dir}/go.mod
-        cd "${GITHUB_WORKSPACE}"
       fi
     done
   done
