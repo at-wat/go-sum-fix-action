@@ -24,6 +24,8 @@ inputs:
     description: "Check that previous commit is go mod tidy-ed. Defaults to true. Note that disabling this check may cause infinite loop of bot push when base branch is not tidied. (true|false)"
   update_import_path:
     description: "Automatically update package import path."
+  monorepos:
+    description: "Packages to automatically update submodule versions tagged to the same commit."
 runs:
   using: "docker"
   image: "Dockerfile"

@@ -17,13 +17,15 @@ then
   exit 0
 fi
 
+commit_message="$(git log --oneline -n1 --format="%s")"
+
 update_import_path=false
-if git log --oneline -n1 --format="%s" | grep -s -e " to v[0-9]\+$"
+if echo "${commit_message}" | grep -s -e " to v[0-9]\+\$"
 then
   case ${INPUT_UPDATE_IMPORT_PATH:-true} in
     true)
       update_import_path=true
-      from_to=$(git log --oneline -n1 --format="%s" | sed -n 's|^Update module \(\S\+\)/\(v[0-9]\+\) to \(v[0-9]\+\)$|\1/\2 \1/\3|p')
+      from_to=$(echo "${commit_message}" | sed -n 's|^Update module \(\S\+\)/\(v[0-9]\+\) to \(v[0-9]\+\)$|\1/\2 \1/\3|p')
       import_path_from=$(echo ${from_to} | cut -f1 -d" ")
       import_path_to=$(echo ${from_to} | cut -f2 -d" ")
       if [ -z "${import_path_from}" ] || [ -z "${import_path_to}" ]
@@ -38,6 +40,22 @@ then
       ;;
   esac
 fi
+
+monorepo=
+monorepo_major=
+monorepo_version=
+for pkg in ${INPUT_MONOREPOS}
+do
+  pkg_esc=$(echo ${pkg} | sed 's/\./\\./g')
+  if echo "${commit_message}" | grep -s -e "^Update module ${pkg_esc} to "
+  then
+    monorepo=$(echo ${pkg} | sed 's|/v[0-9]\+$||')
+    monorepo_major=$(echo ${pkg} | sed -n 's|\(/v[0-9]\+\)$|\1|')
+    monorepo_version=$(echo "${commit_message}" | sed -n "s|^Update module ${pkg_esc} to \(v[0-9\.]\+\)\$|\1|p")
+    echo "Monorepo ${monorepo} ${monorepo_major} ${monorepo_version}"
+    break
+  fi
+done
 
 export GOPRIVATE=${INPUT_GOPRIVATE:-}
 
@@ -95,6 +113,31 @@ then
   echo "Updating import path from ${import_path_from} to ${import_path_to}"
   sed "s|\"$(echo ${import_path_from} | sed 's/\./\\./g')|\"${import_path_to}|" \
     -i $(find . -name "*.go")
+fi
+
+if [ -n "${monorepo}" ] && [ -n "${monorepo_version}" ]
+then
+  tmpdir=$(mktemp -d)
+  git clone -b ${monorepo_version} --depth=1 https://${monorepo} ${tmpdir}
+  echo "Updating submodules of ${monorepo} ${monorepo_version}"
+  tags=$(git -C ${tmpdir} tag --list --points-at HEAD)
+
+  for tag in ${tags}
+  do
+    subpkg=$(dirname ${tag})
+    subpkg_version=$(basename ${tag})
+
+    echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
+    do
+      if grep -s -F "${monorepo}${monorepo_major}/${subpkg}" ${dir}/go.mod
+      then
+        echo "  - ${subpkg} ${subpkg_version}"
+        from=$(echo "${monorepo}${monorepo_major}/${subpkg} v[0-9\.]\+" | sed 's/\./\\./g')
+        to="${monorepo}${monorepo_major}/${subpkg} ${subpkg_version}"
+        sed "s|\<${from}\>|${to}|" -i ${dir}/go.mod
+      fi
+    done
+  done
 fi
 
 echo "Tidying"
