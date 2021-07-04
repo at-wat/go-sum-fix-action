@@ -119,6 +119,8 @@ then
   git clone -b ${monorepo_version} --depth=1 https://${monorepo} ${tmpdir}
   echo "Updating submodules of ${monorepo} ${monorepo_version}"
   tags=$(git -C ${tmpdir} tag --list --points-at HEAD)
+  echo "tags: ${tags}"
+
   for tag in ${tags}
   do
     subpkg=$(dirname ${tag})
@@ -126,7 +128,7 @@ then
 
     echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
     do
-      if grep -s -F "${monorepo}/${subpkg}" ${dir}
+      if grep -s -F "${monorepo}/${subpkg}" ${dir}/go.mod
       then
         echo "  - ${subpkg} ${subpkg_version}"
         cd ${dir}
