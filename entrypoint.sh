@@ -42,6 +42,7 @@ then
 fi
 
 monorepo=
+monorepo_major=
 monorepo_version=
 for pkg in ${INPUT_MONOREPOS}
 do
@@ -49,8 +50,9 @@ do
   if echo "${commit_message}" | grep -s -e "^Update module ${pkg_esc} to "
   then
     monorepo=$(echo ${pkg} | sed 's|/v[0-9]\+$||')
+    monorepo_major=$(echo ${pkg} | sed -n 's|\(/v[0-9]\+\)$|\1|')
     monorepo_version=$(echo "${commit_message}" | sed -n "s|^Update module ${pkg_esc} to \(v[0-9\.]\+\)\$|\1|p")
-    echo "Monorepo ${monorepo} ${monorepo_version}"
+    echo "Monorepo ${monorepo} ${monorepo_major} ${monorepo_version}"
     break
   fi
 done
@@ -128,11 +130,13 @@ then
 
     echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
     do
-      if grep -s -F "${monorepo}/${subpkg}" ${dir}/go.mod
+      if grep -s -F "${monorepo}${monorepo_major}/${subpkg}" ${dir}/go.mod
       then
         echo "  - ${subpkg} ${subpkg_version}"
         cd ${dir}
-        go get ${monorepo}/${subpkg}@${subpkg_version}
+        from=$(echo "${monorepo}${monorepo_major}/${subpkg} v[0-9\.]\+" | sed 's/\./\\./g')
+        to="${monorepo}${monorepo_major}/${subpkg} ${subpkg_version}"
+        sed "s|\<${from}\>|${to}|" -i ${dir}/go.mod
         cd "${GITHUB_WORKSPACE}"
       fi
     done
