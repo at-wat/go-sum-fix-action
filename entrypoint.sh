@@ -50,8 +50,8 @@ do
   if echo "${commit_message}" | grep -s -e "[uU]pdate module ${pkg_esc} to "
   then
     monorepo=$(echo ${pkg} | sed 's|/v[0-9]\+$||')
-    monorepo_major=$(echo ${pkg} | sed -n 's|\(/v[0-9]\+\)$|\1|')
-    monorepo_version=$(echo "${commit_message}" | sed -n "s|[uU]pdate module ${pkg_esc} to \(v[0-9\.]\+\)\$|\1|p")
+    monorepo_major=$(echo ${pkg} | sed -n 's|^.*\(/v[0-9]\+\)$|\1|p')
+    monorepo_version=$(echo "${commit_message}" | sed -n "s|^.*[uU]pdate module ${pkg_esc} to \(v[0-9\.]\+\)\$|\1|p")
     echo "Monorepo ${monorepo} ${monorepo_major} ${monorepo_version}"
     break
   fi
