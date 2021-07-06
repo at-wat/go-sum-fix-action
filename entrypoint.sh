@@ -25,7 +25,7 @@ then
   case ${INPUT_UPDATE_IMPORT_PATH:-true} in
     true)
       update_import_path=true
-      from_to=$(echo "${commit_message}" | sed -n 's|^Update module \(\S\+\)/\(v[0-9]\+\) to \(v[0-9]\+\)$|\1/\2 \1/\3|p')
+      from_to=$(echo "${commit_message}" | sed -n 's|[uU]pdate module \(\S\+\)/\(v[0-9]\+\) to \(v[0-9]\+\)$|\1/\2 \1/\3|p')
       import_path_from=$(echo ${from_to} | cut -f1 -d" ")
       import_path_to=$(echo ${from_to} | cut -f2 -d" ")
       if [ -z "${import_path_from}" ] || [ -z "${import_path_to}" ]
@@ -47,11 +47,11 @@ monorepo_version=
 for pkg in ${INPUT_MONOREPOS}
 do
   pkg_esc=$(echo ${pkg} | sed 's/\./\\./g')
-  if echo "${commit_message}" | grep -s -e "^Update module ${pkg_esc} to "
+  if echo "${commit_message}" | grep -s -e "[uU]pdate module ${pkg_esc} to "
   then
     monorepo=$(echo ${pkg} | sed 's|/v[0-9]\+$||')
     monorepo_major=$(echo ${pkg} | sed -n 's|\(/v[0-9]\+\)$|\1|')
-    monorepo_version=$(echo "${commit_message}" | sed -n "s|^Update module ${pkg_esc} to \(v[0-9\.]\+\)\$|\1|p")
+    monorepo_version=$(echo "${commit_message}" | sed -n "s|[uU]pdate module ${pkg_esc} to \(v[0-9\.]\+\)\$|\1|p")
     echo "Monorepo ${monorepo} ${monorepo_major} ${monorepo_version}"
     break
   fi
