@@ -2,7 +2,10 @@ name: ci
 on:
   push:
     branches:
-      - '**'
+      - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   base_tidied:
@@ -10,6 +13,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
       - name: prepare test data
         run: |
           sed 's/v0\.0\.1/v0.0.2/' -i test/tidied/go.mod
@@ -37,6 +43,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
       - name: prepare test data
         run: |
           sed 's/v0\.0\.1/v0.0.2/' -i test/tidied/go.mod
@@ -63,6 +72,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
       - name: prepare test data
         run: |
           git config user.name "Dummy"
@@ -85,6 +97,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
       - name: prepare test data
         run: |
           sed 's/v0\.0\.1/v0.0.2/' -i test/tidied/go.mod
@@ -113,6 +128,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
       - name: prepare test data
         run: |
           sed 's|go-github/v35 v35\.3\.0|go-github/v36 v36.0.0|' -i test/tidied/go.mod
@@ -143,6 +161,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
       - name: prepare test data
         run: |
           sed 's|aws-sdk-go-v2 v1\.5\.0|aws-sdk-go-v2 v1.6.0|' -i test/tidied/go.mod
