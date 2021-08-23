@@ -1,34 +1,37 @@
 name: "Go sum fix"
 description: "Update go.sum."
 inputs:
+  go_version:
+    description: "Go version (e.g. 1.17)"
+    default: "1.17"
   github_token:
-    description: "GITHUB_TOKEN."
+    description: "GITHUB_TOKEN"
     required: true
   git_user:
-    description: "User name of commit author."
+    description: "User name of commit author"
     required: true
   git_email:
-    description: "E-mail address of commit author."
+    description: "E-mail address of commit author"
     required: true
   commit_style:
-    description: "Commit style. (add|squash)"
+    description: "Commit style (add|squash)"
   commit_message:
-    description: "Commit message."
+    description: "Commit message"
   push:
     description: "Push to the branch? (no|yes|force)"
   goprivate:
-    description: "Set GOPRIVATE."
+    description: "Set GOPRIVATE"
   go_mod_paths:
-    description: "Space separated list of the paths to the directories of go.mod. Automatically detected by default."
+    description: "Space separated list of the paths to the directories of go.mod. Automatically detected by default"
   check_previously_tidied:
-    description: "Check that previous commit is go mod tidy-ed. Defaults to true. Note that disabling this check may cause infinite loop of bot push when base branch is not tidied. (true|false)"
+    description: "Check that previous commit is go mod tidy-ed. Defaults to true. Note that disabling this check may cause infinite loop of bot push when base branch is not tidied (true|false)"
   update_import_path:
-    description: "Automatically update package import path."
+    description: "Automatically update package import path"
   monorepos:
-    description: "Packages to automatically update submodule versions tagged to the same commit."
+    description: "Packages to automatically update submodule versions tagged to the same commit"
 runs:
   using: "docker"
-  image: "Dockerfile"
+  image: ".go-${ inputs.go_version }.Dockerfile"
 branding:
   icon: "refresh-ccw"
   color: "white"

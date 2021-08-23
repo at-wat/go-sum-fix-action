@@ -8,8 +8,27 @@ on:
       - master
 
 jobs:
+  generated:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
+      - name: make
+        run: make
+      - name: check diff
+        run: git diff --exit-code
   base_tidied:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go_version:
+          - "1.14"
+          - "1.15"
+          - "1.16"
+          - "1.17"
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -26,6 +45,7 @@ jobs:
       - name: run
         uses: ./
         with:
+          go_version: ${{ matrix.go_version }}
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
@@ -40,6 +60,13 @@ jobs:
           ! grep "v0.0.1/go.mod" test/tidied/go.sum
   indirect_changed:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go_version:
+          - "1.14"
+          - "1.15"
+          - "1.16"
+          - "1.17"
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -58,6 +85,7 @@ jobs:
       - name: run
         uses: ./
         with:
+          go_version: ${{ matrix.go_version }}
           check_previously_tidied: false
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
@@ -69,6 +97,13 @@ jobs:
           grep "github.com/at-wat/sandbox v0.0.0-20200609080939-f9cdf82dbb3d // indirect" test/tidied/go.mod
   base_not_tidied:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go_version:
+          - "1.14"
+          - "1.15"
+          - "1.16"
+          - "1.17"
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -85,6 +120,7 @@ jobs:
         uses: ./
         continue-on-error: true
         with:
+          go_version: ${{ matrix.go_version }}
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
@@ -94,6 +130,13 @@ jobs:
         run: test "${{ steps.failure.outcome }}" == "failure"
   non_renovate_bot:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go_version:
+          - "1.14"
+          - "1.15"
+          - "1.16"
+          - "1.17"
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -110,6 +153,7 @@ jobs:
       - name: run
         uses: ./
         with:
+          go_version: ${{ matrix.go_version }}
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
@@ -125,6 +169,13 @@ jobs:
           ! grep "v0.0.2/go.mod" test/tidied/go.sum
   major_import_path:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go_version:
+          - "1.14"
+          - "1.15"
+          - "1.16"
+          - "1.17"
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -141,6 +192,7 @@ jobs:
       - name: run
         uses: ./
         with:
+          go_version: ${{ matrix.go_version }}
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
@@ -158,6 +210,13 @@ jobs:
           ! grep "go-github/v35" test/tidied/dummy.go
   monorepo:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go_version:
+          - "1.14"
+          - "1.15"
+          - "1.16"
+          - "1.17"
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -174,6 +233,7 @@ jobs:
       - name: run
         uses: ./
         with:
+          go_version: ${{ matrix.go_version }}
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
           github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
