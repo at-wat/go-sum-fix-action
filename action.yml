@@ -31,7 +31,7 @@ inputs:
     description: "Packages to automatically update submodule versions tagged to the same commit"
 runs:
   using: "docker"
-  image: ".go-${ inputs.go_version }.Dockerfile"
+  image: ".go-${{ inputs.go_version }}.Dockerfile"
 branding:
   icon: "refresh-ccw"
   color: "white"
