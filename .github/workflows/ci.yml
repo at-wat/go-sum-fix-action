@@ -23,6 +23,7 @@ jobs:
   base_tidied:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         go_version:
           - "1.14"
@@ -61,6 +62,7 @@ jobs:
   indirect_changed:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         go_version:
           - "1.14"
@@ -98,6 +100,7 @@ jobs:
   base_not_tidied:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         go_version:
           - "1.14"
@@ -131,6 +134,7 @@ jobs:
   non_renovate_bot:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         go_version:
           - "1.14"
@@ -170,6 +174,7 @@ jobs:
   major_import_path:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         go_version:
           - "1.14"
@@ -211,6 +216,7 @@ jobs:
   monorepo:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         go_version:
           - "1.14"
