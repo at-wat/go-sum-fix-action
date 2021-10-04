@@ -12,10 +12,7 @@ Since v0.3.0, **go-sum-fix-action fails if previous commit is not tidied**. This
 Use Renovate `gomodUpdateImportPaths` option instead.
 ([postUpdateOptions](https://docs.renovatebot.com/configuration-options/#postupdateoptions))
 ```json
-  "postUpdateOptions": [
-    "gomodUpdateImportPaths",
-    "gomodTidy"
-  ]
+  "postUpdateOptions": ["gomodUpdateImportPaths", "gomodTidy"]
 ```
 
 ## Example
