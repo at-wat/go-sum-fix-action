@@ -3,7 +3,17 @@ GitHub Action to update go.sum.
 
 ## Updates
 
+### v0.3.0
 Since v0.3.0, **go-sum-fix-action fails if previous commit is not tidied**. This is to prevent causing infinite loop of force-push by Renovate bot and go-sum-fix-action.
+
+### v0.8.0
+
+`update_import_path` option is deprecated and will be removed in a future release.
+Use Renovate `gomodUpdateImportPaths` option instead.
+([postUpdateOptions](https://docs.renovatebot.com/configuration-options/#postupdateoptions))
+```json
+  "postUpdateOptions": ["gomodUpdateImportPaths", "gomodTidy"]
+```
 
 ## Example
 
@@ -32,5 +42,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           commit_style: squash
           push: force
-          update_import_path: true # update import path on major update
 ```
