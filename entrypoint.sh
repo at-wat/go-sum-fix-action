@@ -24,6 +24,12 @@ if echo "${commit_message}" | grep -s -e " to v[0-9]\+\$"
 then
   case ${INPUT_UPDATE_IMPORT_PATH:-true} in
     true)
+      grep --line-number "update_import_path:\s\+true" .github/workflows/*.y?(a)ml | while read line
+      do
+        file=$(echo ${line} | cut -d: -f1)
+        line=$(echo ${line} | cut -d: -f2)
+        echo "::warning file=${file},line=${line},title=DEPRECATED::update_import_path option is deprecated. Use Renovate gomodUpdateImportPaths option instead."
+      done
       update_import_path=true
       from_to=$(echo "${commit_message}" | sed -n 's|[uU]pdate module \(\S\+\)/\(v[0-9]\+\) to \(v[0-9]\+\)$|\1/\2 \1/\3|p')
       import_path_from=$(echo ${from_to} | cut -f1 -d" ")

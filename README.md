@@ -32,5 +32,17 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           commit_style: squash
           push: force
-          update_import_path: true # update import path on major update
+```
+
+## Deprecated option
+
+### update\_import\_path
+
+Use Renovate `gomodUpdateImportPaths` option instead.
+([postUpdateOptions](https://docs.renovatebot.com/configuration-options/#postupdateoptions))
+```json
+  "postUpdateOptions": [
+    "gomodUpdateImportPaths",
+    "gomodTidy"
+  ]
 ```
