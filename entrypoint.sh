@@ -24,7 +24,7 @@ if echo "${commit_message}" | grep -s -e " to v[0-9]\+\$"
 then
   case ${INPUT_UPDATE_IMPORT_PATH:-true} in
     true)
-      grep --line-number "update_import_path:\s\+true" .github/workflows/*.y*ml | while read line
+      grep -n "update_import_path:\s\+true" .github/workflows/*.y*ml | while read line
       do
         file=$(echo ${line} | cut -d: -f1)
         line=$(echo ${line} | cut -d: -f2)
