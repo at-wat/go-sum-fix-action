@@ -11,6 +11,7 @@ fi
 
 set -eu
 
+git config --global --add safe.directory ${GITHUB_WORKSPACE}
 if [ ! "$(git show HEAD --pretty=format:%ae -s)" = "bot@renovateapp.com" ]
 then
   echo "HEAD commit author is not Renovate Bot" >&2
