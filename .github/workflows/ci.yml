@@ -28,7 +28,7 @@ jobs:
         with:
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
-          github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
           go_mod_paths: test/tidied
       - name: validate
@@ -61,7 +61,7 @@ jobs:
           check_previously_tidied: false
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
-          github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
           go_mod_paths: test/tidied
       - name: validate
@@ -87,7 +87,7 @@ jobs:
         with:
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
-          github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
           go_mod_paths: test/not-tidied
       - name: validate
@@ -112,7 +112,7 @@ jobs:
         with:
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
-          github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
           go_mod_paths: test/tidied
       - name: validate
@@ -143,7 +143,7 @@ jobs:
         with:
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
-          github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
           go_mod_paths: test/tidied
           update_import_path: true
@@ -176,7 +176,7 @@ jobs:
         with:
           git_user: Dummy
           git_email: 8390204+at-wat@users.noreply.github.com
-          github_token: ${{ secrets.BOT_GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           push: no
           go_mod_paths: test/tidied
           monorepos: |
