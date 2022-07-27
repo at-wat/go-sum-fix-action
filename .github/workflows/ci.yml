@@ -21,7 +21,7 @@ jobs:
           sed 's/v0\.0\.1/v0.0.2/' -i test/tidied/go.mod
           git add test/tidied/go.mod
           git config user.name "Dummy"
-          git config user.email "bot@renovateapp.com"
+          git config user.email "29139614+renovate[bot]@users.noreply.github.com"
           git commit -m "Test"
       - name: run
         uses: ./
@@ -53,7 +53,7 @@ jobs:
             -i test/tidied/go.mod
           git add test/tidied/go.mod
           git config user.name "Dummy"
-          git config user.email "bot@renovateapp.com"
+          git config user.email "29139614+renovate[bot]@users.noreply.github.com"
           git commit -m "Test"
       - name: run
         uses: ./
@@ -78,7 +78,7 @@ jobs:
       - name: prepare test data
         run: |
           git config user.name "Dummy"
-          git config user.email "bot@renovateapp.com"
+          git config user.email "29139614+renovate[bot]@users.noreply.github.com"
           git commit -m "Test" --allow-empty
       - name: run
         id: failure
@@ -136,7 +136,7 @@ jobs:
           sed 's|go-github/v35 v35\.3\.0|go-github/v36 v36.0.0|' -i test/tidied/go.mod
           git add test/tidied/go.mod
           git config user.name "Dummy"
-          git config user.email "bot@renovateapp.com"
+          git config user.email "29139614+renovate[bot]@users.noreply.github.com"
           git commit -m "Update module github.com/google/go-github/v35 to v36"
       - name: run
         uses: ./
@@ -169,7 +169,7 @@ jobs:
           sed 's|aws-sdk-go-v2 v1\.5\.0|aws-sdk-go-v2 v1.6.0|' -i test/tidied/go.mod
           git add test/tidied/go.mod
           git config user.name "Dummy"
-          git config user.email "bot@renovateapp.com"
+          git config user.email "29139614+renovate[bot]@users.noreply.github.com"
           git commit -m "Update module github.com/aws/aws-sdk-go-v2 to v1.6.0"
       - name: run
         uses: ./
@@ -192,3 +192,33 @@ jobs:
           ! grep "aws-sdk-go-v2 v1\.5\.0/go.mod" test/tidied/go.sum
           ! grep "aws-sdk-go-v2/config v1\.2\.0 h1" test/tidied/go.sum
           ! grep "aws-sdk-go-v2/config v1\.2\.0/go.mod" test/tidied/go.sum
+  base_tidied_old_email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
+      - name: prepare test data
+        run: |
+          sed 's/v0\.0\.1/v0.0.2/' -i test/tidied/go.mod
+          git add test/tidied/go.mod
+          git config user.name "Dummy"
+          git config user.email "bot@renovateapp.com"
+          git commit -m "Test"
+      - name: run
+        uses: ./
+        with:
+          git_user: Dummy
+          git_email: 8390204+at-wat@users.noreply.github.com
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          push: no
+          go_mod_paths: test/tidied
+      - name: validate
+        run: |
+          set -x
+          grep "v0.0.2 h1" test/tidied/go.sum
+          grep "v0.0.2/go.mod" test/tidied/go.sum
+          ! grep "v0.0.1 h1" test/tidied/go.sum
+          ! grep "v0.0.1/go.mod" test/tidied/go.sum
