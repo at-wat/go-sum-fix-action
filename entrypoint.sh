@@ -172,7 +172,7 @@ fi
 if git diff | grep -e '^[+\-].* // indirect$'
 then
   echo "Indirect dependencies are updated" >&2
-  if [ "${INPUT_FORCE_INDIRECT_UPDATE:-false}" != 'true' ]
+  if [ "${INPUT_CHECK_NO_INDIRECT_DIFFS:-true}" = 'true' ]
   then
     git restore .
     echo "Skipping commit to avoid infinite push loop" >&2
