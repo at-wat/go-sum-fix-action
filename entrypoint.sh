@@ -100,7 +100,7 @@ case ${INPUT_CHECK_PREVIOUSLY_TIDIED:-true} in
       do
         cd ${dir}
         go mod download
-        go mod tidy
+        go mod tidy -go=$(sed -n '/^go/{s/^go\s\+\([0-9]\+\.[0-9]\+\)/\1/p;q}' go.mod)
         cd "${GITHUB_WORKSPACE}"
       done
       if ! git diff --exit-code
@@ -158,7 +158,7 @@ echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
 do
   cd ${dir}
   go mod download
-  go mod tidy
+  go mod tidy -go=$(sed -n '/^go/{s/^go\s\+\([0-9]\+\.[0-9]\+\)/\1/p;q}' go.mod)
   cd "${GITHUB_WORKSPACE}"
 done
 
@@ -171,10 +171,13 @@ fi
 # Check no `// indirect` is updated
 if git diff | grep -e '^[+\-].* // indirect$'
 then
-  git restore .
   echo "Indirect dependencies are updated" >&2
-  echo "Skipping commit to avoid infinite push loop" >&2
-  exit 0
+  if [ "${INPUT_FORCE_INDIRECT_UPDATE:-false}" != 'true' ]
+  then
+    git restore .
+    echo "Skipping commit to avoid infinite push loop" >&2
+    exit 0
+  fi
 fi
 
 
