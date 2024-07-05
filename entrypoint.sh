@@ -100,7 +100,7 @@ case ${INPUT_CHECK_PREVIOUSLY_TIDIED:-true} in
       do
         cd ${dir}
         go mod download
-        go mod tidy -go=$(sed -n '/^go/{s/^go\s\+\([0-9]\+\.[0-9]\+\)/\1/p;q}' go.mod)
+        go mod tidy
         cd "${GITHUB_WORKSPACE}"
       done
       if ! git diff --exit-code
@@ -158,7 +158,7 @@ echo ${INPUT_GO_MOD_PATHS} | xargs -r -n1 echo | while read dir
 do
   cd ${dir}
   go mod download
-  go mod tidy -go=$(sed -n '/^go/{s/^go\s\+\([0-9]\+\.[0-9]\+\)/\1/p;q}' go.mod)
+  go mod tidy
   cd "${GITHUB_WORKSPACE}"
 done
 
