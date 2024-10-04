@@ -26,6 +26,8 @@ inputs:
     description: "[DEPRECATED] Automatically update package import path."
   monorepos:
     description: "Packages to automatically update submodule versions tagged to the same commit."
+  check_no_indirect_diffs:
+    description: "Check that indirect dependencies aren't updated. Defaults to true. Note that disabling this check may cause infinite push loop. (true|false)"
 runs:
   using: "docker"
   image: "Dockerfile"
