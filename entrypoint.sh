@@ -85,8 +85,8 @@ trap revert_git_config EXIT
 
 git config --unset-all http."https://github.com/".extraheader || true
 git config --global --unset-all http."https://github.com/".extraheader || true
-git config --get-regexp '^includeif\.gitdir:.*/git-credentials.*' || true
-git config --get-regexp '^includeif\.gitdir:.*/git-credentials.*' \
+git config --get-regexp '^includeif\.gitdir:' || true
+git config --get-regexp '^includeif\.gitdir:' \
   | xargs -n1 git config --unset-all || true
 
 echo "--- cleaned git config"
