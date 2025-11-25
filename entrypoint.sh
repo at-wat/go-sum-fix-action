@@ -70,10 +70,6 @@ export GOPRIVATE=${INPUT_GOPRIVATE:-}
 BRANCH=$(git symbolic-ref -q --short HEAD) \
   || (echo "You are in 'detached HEAD' state" >&2; exit 1)
 
-echo "--- original git config"
-git config --list --show-origin
-echo "---"
-
 echo "Setting up authentication"
 cp .git/config .git/config.bak
 cp ~/.gitconfig ~/.gitconfig.bak
@@ -87,10 +83,6 @@ git config --unset-all http."https://github.com/".extraheader || true
 git config --global --unset-all http."https://github.com/".extraheader || true
 git config --get-regexp --name-only '^includeif\.gitdir:' \
   | xargs -n1 git config --unset-all || true
-
-echo "--- cleaned git config"
-git config --list --show-origin
-echo "---"
 
 git config --global --add http."https://github.com/".extraheader "Authorization: Basic $(echo -n "x-access-token:${INPUT_GITHUB_TOKEN}" | base64 | tr -d '\n')"
 git config user.name ${INPUT_GIT_USER}
