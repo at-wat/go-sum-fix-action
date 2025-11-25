@@ -72,10 +72,14 @@ BRANCH=$(git symbolic-ref -q --short HEAD) \
 
 echo "Setting up authentication"
 cp .git/config .git/config.bak
-cp ~/.gitconfig ~/.gitconfig.bak
+if [ -f ~/.gitconfig ]; then
+  cp ~/.gitconfig ~/.gitconfig.bak
+fi
 revert_git_config() {
   mv .git/config.bak .git/config
-  mv ~/.gitconfig.bak ~/.gitconfig
+  if [ -f ~/.gitconfig.bak ]; then
+    mv ~/.gitconfig.bak ~/.gitconfig
+  fi
 }
 trap revert_git_config EXIT
 
