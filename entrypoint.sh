@@ -72,12 +72,22 @@ BRANCH=$(git symbolic-ref -q --short HEAD) \
 
 echo "Setting up authentication"
 cp .git/config .git/config.bak
+if [ -f ~/.gitconfig ]; then
+  cp ~/.gitconfig ~/.gitconfig.bak
+fi
 revert_git_config() {
   mv .git/config.bak .git/config
+  if [ -f ~/.gitconfig.bak ]; then
+    mv ~/.gitconfig.bak ~/.gitconfig
+  fi
 }
 trap revert_git_config EXIT
 
-git config --unset http."https://github.com/".extraheader || true
+git config --unset-all http."https://github.com/".extraheader || true
+git config --global --unset-all http."https://github.com/".extraheader || true
+git config --get-regexp --name-only '^includeif\.gitdir:' \
+  | xargs -n1 git config --unset-all || true
+
 git config --global --add http."https://github.com/".extraheader "Authorization: Basic $(echo -n "x-access-token:${INPUT_GITHUB_TOKEN}" | base64 | tr -d '\n')"
 git config user.name ${INPUT_GIT_USER}
 git config user.email ${INPUT_GIT_EMAIL}
