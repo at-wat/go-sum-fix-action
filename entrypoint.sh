@@ -71,6 +71,8 @@ BRANCH=$(git symbolic-ref -q --short HEAD) \
   || (echo "You are in 'detached HEAD' state" >&2; exit 1)
 
 echo "---"
+env
+echo "---"
 git config --list --show-origin
 echo "---"
 
