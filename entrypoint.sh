@@ -86,7 +86,7 @@ trap revert_git_config EXIT
 git config --unset-all http."https://github.com/".extraheader || true
 git config --global --unset-all http."https://github.com/".extraheader || true
 git config --get-regexp --name-only '^includeif\.gitdir:' \
-  | xargs -n1 git config --unset-all || true
+  | xargs -r -n1 git config --unset-all || true
 
 git config --global --add http."https://github.com/".extraheader "Authorization: Basic $(echo -n "x-access-token:${INPUT_GITHUB_TOKEN}" | base64 | tr -d '\n')"
 git config user.name ${INPUT_GIT_USER}
